@@ -1,5 +1,7 @@
 # PayForWechat - 支付管理平台
 
+为开发者打造的一款用于生成支付订单二维码（支持微信支付）并操作管理的支付后台系统
+
 一个前后端分离的开发者支付管理平台，支持支付订单创建、自动手续费结算、钱包系统和提现系统。
 
 ## 技术栈
@@ -225,6 +227,22 @@ PayForWechat/
 - [ ] 实现费率配置
 - [ ] 添加订单导出功能
 
-## 许可证
+License
+=======
 
-MIT License
+
+```
+Copyright [2026] [guess-caicai]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```
