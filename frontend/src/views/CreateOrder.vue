@@ -1,8 +1,8 @@
 <template>
-  <div class="create-order">
+  <div class="create-order page-shell">
     <el-card>
       <template #header>
-        <div class="card-header">
+        <div class="card-header page-card-header">
           <span>💰 创建支付订单</span>
         </div>
       </template>
@@ -67,18 +67,17 @@
 
 <script>
 import { ref, reactive } from 'vue'
-import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { createOrder } from '@/api'
 
 export default {
   name: 'CreateOrder',
   setup() {
-    const router = useRouter()
     const orderFormRef = ref(null)
     const loading = ref(false)
     const qrCode = ref('')
     const platformOrderNo = ref('')
+    const payUrl = ref('')
 
     const orderForm = reactive({
       developer_order_no: '',
@@ -104,24 +103,10 @@ export default {
 
       loading.value = true
       try {
-        // 获取开发者信息
-        const profile = await import('@/api').then(api => api.getProfile())
-        const payKey = profile.pay_key
-        const paySecret = profile.pay_secret
-
-        // 生成签名
-        const params = {
-          developer_order_no: orderForm.developer_order_no,
-          amount: orderForm.amount.toString(),
-          notify_url: orderForm.notify_url,
-          pay_key: payKey
-        }
-
-        // 这里应该是调用后端签名接口，暂时简化处理
-        // 实际应该由后端生成签名并创建订单
         const res = await createOrder(orderForm)
         qrCode.value = res.qr_code
         platformOrderNo.value = res.platform_order_no
+        payUrl.value = res.pay_url
 
         ElMessage.success('订单创建成功！')
       } catch (error) {
@@ -135,10 +120,12 @@ export default {
       orderFormRef.value.resetFields()
       qrCode.value = ''
       platformOrderNo.value = ''
+      payUrl.value = ''
     }
 
     const handleMockPay = () => {
-      window.open(`http://localhost:8000/pay/mock/${platformOrderNo.value}`, '_blank')
+      if (!payUrl.value) return
+      window.open(payUrl.value, '_blank')
     }
 
     return {
@@ -148,6 +135,7 @@ export default {
       loading,
       qrCode,
       platformOrderNo,
+      payUrl,
       handleSubmit,
       handleReset,
       handleMockPay
@@ -160,16 +148,18 @@ export default {
 .create-order {
   max-width: 800px;
   margin: 0 auto;
+  padding: 0;
 }
 
 .order-form {
-  padding-right: 60px;
+  padding-right: 20px;
 }
 
 .qr-preview {
   margin-top: 30px;
   padding: 20px;
-  background-color: #f5f7fa;
+  background-color: #fafafa;
+  border: 1px solid #e5e7eb;
   border-radius: 8px;
 }
 
@@ -194,6 +184,12 @@ export default {
 
 .card-header {
   font-size: 18px;
-  font-weight: bold;
+  font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  .order-form {
+    padding-right: 0;
+  }
 }
 </style>

@@ -1,7 +1,6 @@
-from sqlalchemy import Column, BigInteger, String, Integer, DateTime, Numeric, ForeignKey, Index
+from sqlalchemy import Column, BigInteger, String, Integer, DateTime, Numeric, ForeignKey, Index, UniqueConstraint, Text
 from sqlalchemy.sql import func
 from backend.app.core.database import Base
-import uuid
 
 class Developer(Base):
     """开发者表"""
@@ -12,6 +11,7 @@ class Developer(Base):
     password_hash = Column(String(255), nullable=False, comment="密码哈希")
     pay_key = Column(String(64), unique=True, nullable=False, comment="支付密钥")
     pay_secret = Column(String(128), nullable=False, comment="支付密钥")
+    wechat_openid = Column(String(128), nullable=True, comment="收款OpenID")
     status = Column(Integer, default=1, comment="状态: 1-正常, 0-禁用")
     created_at = Column(DateTime, server_default=func.now(), comment="创建时间")
 
@@ -50,6 +50,11 @@ class Order(Base):
     developer_income = Column(Numeric(15, 2), default=0, comment="开发者收入")
     status = Column(Integer, default=0, comment="状态: 0-待支付, 1-已支付, 2-已取消")
     notify_url = Column(String(255), nullable=False, comment="回调URL")
+    payment_channel = Column(String(20), nullable=False, default="wechat", comment="支付通道")
+    provider_trade_no = Column(String(64), nullable=True, comment="上游交易号")
+    provider_state = Column(String(32), nullable=True, comment="上游状态")
+    code_url = Column(String(1024), nullable=True, comment="Native二维码地址")
+    callback_payload = Column(Text, nullable=True, comment="回调原文")
     pay_time = Column(DateTime, nullable=True, comment="支付时间")
     created_at = Column(DateTime, server_default=func.now(), comment="创建时间")
 
@@ -58,6 +63,7 @@ class Order(Base):
         Index('idx_developer_order_no', 'developer_order_no'),
         Index('idx_developer_id', 'developer_id'),
         Index('idx_status', 'status'),
+        UniqueConstraint('developer_id', 'developer_order_no', name='uq_order_developer_order_no'),
     )
 
 
@@ -68,7 +74,12 @@ class Withdraw(Base):
     id = Column(BigInteger, primary_key=True, autoincrement=True, comment="提现ID")
     developer_id = Column(BigInteger, ForeignKey('developers.id', ondelete='CASCADE'), nullable=False, comment="开发者ID")
     amount = Column(Numeric(15, 2), nullable=False, comment="提现金额")
+    mode = Column(String(16), nullable=False, default="partial", comment="提现模式: partial/all")
     status = Column(Integer, default=0, comment="状态: 0-待审核, 1-已通过, 2-已拒绝, 3-已完成")
+    provider_transfer_no = Column(String(64), nullable=True, comment="商家转账单号")
+    provider_status = Column(String(32), nullable=True, comment="转账状态")
+    provider_package_info = Column(String(1024), nullable=True, comment="用户确认包参数")
+    failure_reason = Column(String(255), nullable=True, comment="失败原因")
     created_at = Column(DateTime, server_default=func.now(), comment="创建时间")
     finished_at = Column(DateTime, nullable=True, comment="完成时间")
 
@@ -97,4 +108,21 @@ class WalletLog(Base):
         Index('idx_developer_id', 'developer_id'),
         Index('idx_order_id', 'order_id'),
         Index('idx_withdraw_id', 'withdraw_id'),
+    )
+
+
+class ProviderEvent(Base):
+    """第三方事件记录"""
+    __tablename__ = "provider_events"
+
+    id = Column(BigInteger, primary_key=True, autoincrement=True, comment="事件ID")
+    event_type = Column(String(64), nullable=False, comment="事件类型")
+    ref_no = Column(String(64), nullable=True, comment="关联单号")
+    payload = Column(Text, nullable=False, comment="回调原文")
+    processed = Column(Integer, default=0, comment="处理状态")
+    created_at = Column(DateTime, server_default=func.now(), comment="创建时间")
+
+    __table_args__ = (
+        Index('idx_event_type', 'event_type'),
+        Index('idx_ref_no', 'ref_no'),
     )

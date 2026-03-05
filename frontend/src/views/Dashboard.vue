@@ -1,8 +1,8 @@
 <template>
-  <div class="dashboard">
+  <div class="dashboard page-shell">
     <el-row :gutter="20">
       <!-- 今日收入 -->
-      <el-col :span="6">
+      <el-col :xs="24" :sm="12" :lg="6">
         <el-card class="stat-card">
           <div class="stat-icon income-icon">
             <el-icon><Money /></el-icon>
@@ -15,7 +15,7 @@
       </el-col>
 
       <!-- 总收入 -->
-      <el-col :span="6">
+      <el-col :xs="24" :sm="12" :lg="6">
         <el-card class="stat-card">
           <div class="stat-icon total-icon">
             <el-icon><Wallet /></el-icon>
@@ -28,7 +28,7 @@
       </el-col>
 
       <!-- 可用余额 -->
-      <el-col :span="6">
+      <el-col :xs="24" :sm="12" :lg="6">
         <el-card class="stat-card">
           <div class="stat-icon balance-icon">
             <el-icon><BankCard /></el-icon>
@@ -41,7 +41,7 @@
       </el-col>
 
       <!-- 总提现 -->
-      <el-col :span="6">
+      <el-col :xs="24" :sm="12" :lg="6">
         <el-card class="stat-card">
           <div class="stat-icon withdraw-icon">
             <el-icon><Upload /></el-icon>
@@ -81,7 +81,7 @@
     </el-row>
 
     <el-row :gutter="20" style="margin-top: 20px;">
-      <el-col :span="16">
+      <el-col :xs="24" :lg="16">
         <el-card>
           <template #header>
             <div class="card-header">
@@ -113,7 +113,7 @@
         </el-card>
       </el-col>
 
-      <el-col :span="8">
+      <el-col :xs="24" :lg="8">
         <el-card>
           <template #header>
             <div class="card-header">
@@ -223,27 +223,26 @@ export default {
 
 <style scoped>
 .dashboard {
-  padding: 20px;
+  padding: 0;
 }
 
 .stat-card {
   position: relative;
   overflow: hidden;
-  cursor: pointer;
-  transition: all 0.3s;
+  border: 1px solid #e5e7eb;
+  transition: border-color 0.2s ease;
 }
 
 .stat-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  border-color: #d1d5db;
 }
 
 .stat-icon {
   position: absolute;
   right: 20px;
   top: 20px;
-  font-size: 60px;
-  opacity: 0.2;
+  font-size: 40px;
+  opacity: 0.1;
 }
 
 .income-icon { color: #409eff; }
@@ -262,19 +261,22 @@ export default {
 }
 
 .stat-value {
-  font-size: 30px;
-  font-weight: bold;
-  color: #303133;
+  font-size: 26px;
+  font-weight: 600;
+  color: #111827;
 }
 
 .quick-actions {
   display: flex;
-  gap: 10px;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 </style>

@@ -138,13 +138,15 @@ export default {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #f6f7f9;
 }
 
 .login-card {
-  width: 450px;
+  width: 400px;
   border-radius: 10px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(17, 24, 39, 0.04);
 }
 
 .card-header {
@@ -153,13 +155,13 @@ export default {
 }
 
 .card-header h2 {
-  color: #333;
+  color: #111827;
   margin: 0;
-  font-size: 28px;
+  font-size: 24px;
 }
 
 .card-header p {
-  color: #666;
+  color: #6b7280;
   margin: 10px 0 0;
   font-size: 14px;
 }

@@ -8,6 +8,15 @@ export function createOrder(data) {
   })
 }
 
+export function gatewayCreateOrder(data, params) {
+  return request({
+    url: '/pay/gateway/create',
+    method: 'post',
+    data,
+    params
+  })
+}
+
 export function getOrders(params) {
   return request({
     url: '/pay',

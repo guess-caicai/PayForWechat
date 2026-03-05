@@ -1,11 +1,11 @@
 <template>
-  <div class="withdraw">
+  <div class="withdraw page-shell">
     <el-row :gutter="20">
       <!-- 申请提现 -->
-      <el-col :span="8">
+      <el-col :xs="24" :lg="8">
         <el-card>
           <template #header>
-            <div class="card-header">
+            <div class="card-header page-card-header">
               <span>💰 申请提现</span>
             </div>
           </template>
@@ -29,6 +29,7 @@
                 :max="wallet.balance"
                 :precision="2"
                 :step="1"
+                :disabled="withdrawForm.withdraw_all"
                 style="width: 100%"
               >
                 <template #suffix>¥</template>
@@ -36,6 +37,10 @@
               <div class="tip-text">
                 最低提现金额：¥1.00
               </div>
+            </el-form-item>
+
+            <el-form-item>
+              <el-checkbox v-model="withdrawForm.withdraw_all">全额提现（按可用余额）</el-checkbox>
             </el-form-item>
 
             <el-form-item>
@@ -48,10 +53,10 @@
       </el-col>
 
       <!-- 提现记录 -->
-      <el-col :span="16">
+      <el-col :xs="24" :lg="16">
         <el-card>
           <template #header>
-            <div class="card-header">
+            <div class="card-header page-card-header">
               <span>📋 提现记录</span>
             </div>
           </template>
@@ -133,10 +138,11 @@ export default {
       balance: 0
     })
     const withdraws = ref([])
-    const isAdmin = ref(false) // 简化版，实际应有权限控制
+    const isAdmin = ref(!!localStorage.getItem('admin_key'))
 
     const withdrawForm = reactive({
-      amount: 100
+      amount: 100,
+      withdraw_all: false
     })
 
     const rules = {
@@ -200,14 +206,17 @@ export default {
     const handleSubmit = () => {
       withdrawFormRef.value.validate(async (valid) => {
         if (valid) {
-          if (withdrawForm.amount > wallet.balance) {
+          if (!withdrawForm.withdraw_all && withdrawForm.amount > wallet.balance) {
             ElMessage.error('提现金额不能超过可用余额')
             return
           }
 
           submitting.value = true
           try {
-            await applyWithdraw(withdrawForm)
+            const payload = withdrawForm.withdraw_all
+              ? { withdraw_all: true }
+              : { amount: withdrawForm.amount, withdraw_all: false }
+            await applyWithdraw(payload)
             ElMessage.success('提现申请提交成功，等待审核')
             withdrawFormRef.value.resetFields()
             fetchWallet()
@@ -282,18 +291,18 @@ export default {
 
 <style scoped>
 .withdraw {
-  padding: 20px;
+  padding: 0;
 }
 
 .card-header {
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .balance-info {
-  font-size: 18px;
-  font-weight: bold;
-  color: #67c23a;
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
 }
 
 .tip-text {

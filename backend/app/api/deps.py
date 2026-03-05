@@ -1,8 +1,9 @@
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, status, Header
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
 from jose import JWTError, jwt
 from ..core.database import get_db
+from ..core.settings import settings
 from ..models.models import Developer
 from ..utils.auth import SECRET_KEY, ALGORITHM
 from ..schemas.schemas import TokenData
@@ -49,3 +50,17 @@ def get_current_developer(
         )
 
     return developer
+
+
+def verify_admin_access(x_admin_key: str | None = Header(default=None)) -> None:
+    if not settings.ADMIN_API_KEY:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="管理员功能未配置"
+        )
+
+    if x_admin_key != settings.ADMIN_API_KEY:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="无管理员权限"
+        )

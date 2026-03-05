@@ -18,7 +18,30 @@ export function login(data) {
 
 export function getProfile() {
   return request({
-    url: '/pay/profile',
+    url: '/developer/profile',
     method: 'get'
+  })
+}
+
+export function getApiKeys() {
+  return request({
+    url: '/developer/api-keys',
+    method: 'get'
+  })
+}
+
+export function rotateApiKeys(password) {
+  return request({
+    url: '/developer/api-keys/rotate',
+    method: 'post',
+    data: { password }
+  })
+}
+
+export function bindWechatOpenid(wechat_openid) {
+  return request({
+    url: '/developer/wechat/bind',
+    method: 'post',
+    data: { wechat_openid }
   })
 }

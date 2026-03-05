@@ -1,11 +1,11 @@
 <template>
-  <div class="wallet">
+  <div class="wallet page-shell">
     <el-row :gutter="20">
       <!-- 钱包余额卡片 -->
-      <el-col :span="8">
+      <el-col :xs="24" :md="12" :lg="8">
         <el-card>
           <template #header>
-            <div class="card-header">
+            <div class="card-header page-card-header">
               <span>💰 可用余额</span>
             </div>
           </template>
@@ -16,10 +16,10 @@
         </el-card>
       </el-col>
 
-      <el-col :span="8">
+      <el-col :xs="24" :md="12" :lg="8">
         <el-card>
           <template #header>
-            <div class="card-header">
+            <div class="card-header page-card-header">
               <span>❄️ 冻结余额</span>
             </div>
           </template>
@@ -30,10 +30,10 @@
         </el-card>
       </el-col>
 
-      <el-col :span="8">
+      <el-col :xs="24" :md="24" :lg="8">
         <el-card>
           <template #header>
-            <div class="card-header">
+            <div class="card-header page-card-header">
               <span>📊 统计数据</span>
             </div>
           </template>
@@ -56,7 +56,7 @@
       <el-col :span="24">
         <el-card>
           <template #header>
-            <div class="card-header">
+            <div class="card-header page-card-header">
               <span>📋 钱包流水</span>
             </div>
           </template>
@@ -184,12 +184,12 @@ export default {
 
 <style scoped>
 .wallet {
-  padding: 20px;
+  padding: 0;
 }
 
 .card-header {
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .balance-display {
@@ -198,9 +198,9 @@ export default {
 }
 
 .balance-amount {
-  font-size: 36px;
-  font-weight: bold;
-  color: #409eff;
+  font-size: 32px;
+  font-weight: 600;
+  color: #111827;
   margin-bottom: 10px;
 }
 
@@ -226,9 +226,9 @@ export default {
 }
 
 .stat-value {
-  font-size: 24px;
-  font-weight: bold;
-  color: #303133;
+  font-size: 22px;
+  font-weight: 600;
+  color: #111827;
 }
 
 .text-green {

@@ -1,16 +1,11 @@
 <template>
   <div class="layout-container">
     <el-container>
-      <!-- 侧边栏 -->
       <el-aside width="220px" class="sidebar">
         <div class="logo">
-          <h2>💰 PayForWechat</h2>
+          <h2>PayForWechat</h2>
         </div>
-        <el-menu
-          :default-active="$route.path"
-          router
-          class="menu"
-        >
+        <el-menu :default-active="$route.path" router class="menu">
           <el-menu-item index="/dashboard">
             <el-icon><DataAnalysis /></el-icon>
             <span>数据概览</span>
@@ -35,10 +30,13 @@
             <el-icon><Money /></el-icon>
             <span>提现</span>
           </el-menu-item>
+          <el-menu-item index="/profile">
+            <el-icon><User /></el-icon>
+            <span>个人中心</span>
+          </el-menu-item>
         </el-menu>
       </el-aside>
 
-      <!-- 主内容区 -->
       <el-container>
         <el-header class="header">
           <div class="header-left">
@@ -70,7 +68,7 @@
 <script>
 import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { ElMessageBox, ElMessage } from 'element-plus'
+import { ElMessageBox } from 'element-plus'
 import { getProfile } from '@/api'
 
 export default {
@@ -98,7 +96,7 @@ export default {
     }
 
     const handleProfile = () => {
-      ElMessage.info('功能开发中...')
+      router.push('/profile')
     }
 
     const handleLogout = () => {
@@ -130,13 +128,15 @@ export default {
 <style scoped>
 .layout-container {
   height: 100vh;
-  background-color: #f0f2f5;
+  background: #f6f7f9;
 }
 
 .sidebar {
-  background-color: #304156;
+  background: #ffffff;
   height: 100vh;
   transition: width 0.3s;
+  border-right: 1px solid #e5e7eb;
+  box-shadow: none;
 }
 
 .logo {
@@ -144,41 +144,45 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #2b3a4b;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .logo h2 {
-  color: white;
-  font-size: 20px;
+  color: #111827;
+  font-size: 18px;
   margin: 0;
 }
 
 .menu {
   border-right: none;
-  background-color: #304156;
+  background: transparent;
 }
 
 .menu :deep(.el-menu-item) {
-  color: #bfcbd9;
+  color: #374151;
+  border-radius: 8px;
+  margin: 6px 10px;
 }
 
 .menu :deep(.el-menu-item:hover) {
-  background-color: #263445 !important;
-  color: #409eff !important;
+  background-color: #f3f4f6 !important;
+  color: #111827 !important;
 }
 
 .menu :deep(.el-menu-item.is-active) {
-  background-color: #263445 !important;
-  color: #409eff !important;
+  background: #eef2ff !important;
+  color: #111827 !important;
+  font-weight: 600;
 }
 
 .el-header {
-  background-color: white;
+  background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
-  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .header-left {
@@ -187,8 +191,9 @@ export default {
 }
 
 .hamburger {
-  font-size: 24px;
+  font-size: 20px;
   cursor: pointer;
+  color: #4b5563;
 }
 
 .header-right {
@@ -201,14 +206,33 @@ export default {
   align-items: center;
   gap: 8px;
   cursor: pointer;
+  color: #374151;
 }
 
 .el-main {
-  background-color: #f0f2f5;
-  padding: 20px;
+  background: transparent;
+  padding: 16px;
 }
 
 .main-content {
   overflow-y: auto;
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    width: 72px !important;
+  }
+
+  .logo h2 {
+    font-size: 14px;
+  }
+
+  .menu :deep(.el-menu-item span) {
+    display: none;
+  }
+
+  .el-main {
+    padding: 10px;
+  }
 }
 </style>

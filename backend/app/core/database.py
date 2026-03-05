@@ -1,21 +1,11 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-import os
-from dotenv import load_dotenv
+from .settings import settings
 
-load_dotenv()
-
-# 数据库配置
-DATABASE_URL = os.getenv(
-    "DATABASE_URL",
-    "mysql+pymysql://root:password@localhost:3306/payforwechat?charset=utf8mb4"
-)
-
-# 创建数据库引擎
 engine = create_engine(
-    DATABASE_URL,
-    echo=True,
+    settings.DATABASE_URL,
+    echo=False,
     pool_pre_ping=True,
     pool_recycle=3600,
     max_overflow=20,

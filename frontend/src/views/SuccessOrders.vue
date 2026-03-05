@@ -1,8 +1,10 @@
 <template>
-  <div class="success-orders">
+  <div class="success-orders page-shell">
     <el-card>
       <template #header>
-        <span>✅ 已支付订单</span>
+        <div class="card-header page-card-header">
+          <span class="page-card-title">已支付订单</span>
+        </div>
       </template>
 
       <el-table :data="orders" v-loading="loading" style="width: 100%">
@@ -104,6 +106,6 @@ export default {
 
 <style scoped>
 .success-orders {
-  padding: 20px;
+  padding: 0;
 }
 </style>

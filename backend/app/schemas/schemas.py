@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, HttpUrl
 from datetime import datetime
 from typing import Optional
 from decimal import Decimal
@@ -55,7 +55,7 @@ class WalletResponse(BaseModel):
 class OrderCreate(BaseModel):
     developer_order_no: str = Field(..., max_length=64, description="开发者订单号")
     amount: Decimal = Field(..., ge=0.01, description="订单金额")
-    notify_url: str = Field(..., max_length=255, description="回调URL")
+    notify_url: HttpUrl = Field(..., description="回调URL")
 
 
 class OrderResponse(BaseModel):
@@ -96,7 +96,8 @@ class OrderQuery(BaseModel):
 # ==================== Withdraw ====================
 
 class WithdrawApply(BaseModel):
-    amount: Decimal = Field(..., ge=0.01, description="提现金额")
+    amount: Optional[Decimal] = Field(None, ge=0.01, description="提现金额")
+    withdraw_all: bool = Field(False, description="是否全额提现")
 
 
 class WithdrawResponse(BaseModel):
@@ -119,3 +120,11 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     developer_id: Optional[int] = None
+
+
+class ApiKeyRotateRequest(BaseModel):
+    password: str = Field(..., min_length=6, max_length=128, description="当前登录密码")
+
+
+class BindWechatRequest(BaseModel):
+    wechat_openid: str = Field(..., min_length=10, max_length=128, description="微信OpenID")

@@ -1,8 +1,8 @@
 <template>
-  <div class="order-list">
+  <div class="order-list page-shell">
     <el-card>
       <template #header>
-        <div class="card-header">
+        <div class="card-header page-card-header">
           <span>📋 全部订单</span>
           <el-button type="primary" @click="$router.push('/pay/create')">
             <el-icon><Plus /></el-icon>
@@ -166,7 +166,7 @@ export default {
 
 <style scoped>
 .order-list {
-  padding: 20px;
+  padding: 0;
 }
 
 .card-header {
@@ -177,5 +177,16 @@ export default {
 
 .search-form {
   margin-bottom: 20px;
+  padding: 10px 12px;
+  background: #fafafa;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+@media (max-width: 900px) {
+  .card-header {
+    gap: 10px;
+    flex-wrap: wrap;
+  }
 }
 </style>
